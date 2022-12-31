@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strings"
 )
 
@@ -38,4 +39,18 @@ func (d deck) toString() string {
 
 func (d deck) saveToFile(filename string) error {
 	return ioutil.WriteFile(filename, []byte(d.toString()), 0666)
+}
+
+func newDeckFromFile(filename string) deck {
+	bs, err := ioutil.ReadFile(filename)
+	if err != nil {
+		// エラーを出力
+		fmt.Println("Error:", err)
+		// プログラムを終了
+		os.Exit(1)
+	}
+	// バイトスライスを文字列に変換した上で、文字列を文字列スライスに変換
+	s := strings.Split(string(bs), ",")
+	// 文字列スライスをdeck型に変換
+	return deck(s)
 }
